@@ -29,3 +29,19 @@
 // }
 
 // btnCal.addEventListener('click', showMessage);
+
+
+function ValidateFile(){
+    var input, file, extension;
+
+    input = document.getElementById('dol_qrcode');
+    file = input.files[0];
+    extension = file.name.split('.').pop().toLowerCase() //Check file extension
+    if(extension != 'png' ){
+        // document.getElementById('message').innerHTML =  "File " + file.name + " is " + file.size + " bytes in size" + extension;
+        document.getElementById('message').innerHTML = "File extension is not PNG"
+        document.getElementById('message').removeAttribute('hidden')
+        return false;
+    }
+    return true;
+}

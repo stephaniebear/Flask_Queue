@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block nav %}
+<ul class="nav nav-tabs">
+  <li class="nav-item"></li>
+      <a class="nav-link" href="/">Logs</a>
+  </li>
+  <li class="nav-item">
+      <a class="nav-link active" href="/configs">Configs</a>
+  </li>
+</ul>
+{% endblock %}
+
+{% block content %}
+  <div class="row">
+
+
+    <div class="col-md-12">
+      <form method="POST" action="upload" class="container" enctype="multipart/form-data" onsubmit="return ValidateFile();"> <!-- event.preventDefault() stop submit -->
+        <div class="col-md-12" align="center">
+          <label><h1>Configs</h1></label>
+        </div>
+        <div class="col-md-12">
+          <div class="alert alert-danger" role="alert" id="message" hidden></div>
+        </div>
+        <div class="col-md-12">
+          <label>Office</label>
+          <select class="form-control" name="dol_office" >
+            {% for office in dol_office %}
+              <option value="{{office}}">{{office}}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="col-md-12">
+          <label>Telephone number</label>
+          <input class="form-control" type="text" name="dol_telephone_number"  placeholder="053311356" required>
+        </div>
+        <div class="col-md-12">
+          <label>QR Code</label>
+          <input class="form-control" type="file" name="dol_qrcode" id="dol_qrcode" style="padding: 3px;" required>
+        </div>
+        <div class="col-md-12">
+          <br>
+          <input type="submit" class="btn btn-outline-primary btn-lg btn-block" value="Upload">
+        </div>
+      </form>
+    </div>
+  </div>
+{% endblock %}
