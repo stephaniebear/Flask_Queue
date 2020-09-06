@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for
+from flask import send_file #For download file
 import threading
 import os
 
@@ -21,10 +22,9 @@ def index():
             if file == 'date.txt':
                 print('Skip date file')
             else:
-                
                 print('File : ' + str(os.path.join(file))) # Read logs files
                 f = open('logs/' + str(os.path.join(file)), 'r')
-                logs_file_name.append(str(os.path.join(file))) # Collect file name
+                logs_file_name.append(str(os.path.join(file)).replace(".txt","")) # Collect file name
                 for row in f:
                     if len(row) > 1:
                         temp_logs = row.strip().split(',')
@@ -52,6 +52,7 @@ def upload():
         dol_office = str(dol_office).replace("b'","")
         dol_office = str(dol_office).replace("'","")
         
+        dol_office = str(dol_office).replace("\\r","")
         print(dol_office)
 
         # Save to config.txt
@@ -107,6 +108,43 @@ def configs():
     print(type(dol_office))
 
     return render_template('configs.html', logs_file_dicts=logs_file_dicts, dol_office=dol_office)
+
+@app.route('/view', methods=['GET', 'POST'])
+def view():
+    if request.method == "POST":
+        print('-------- view -------------')
+        print(request.form['viewDate'])
+
+        print(request.form['inlineRadioOptions'])
+
+        if request.form['inlineRadioOptions'] == "option1":
+            # Read logs
+            path = os.path.dirname(os.path.realpath(__file__))
+            path += '/logs'
+
+            logs_file_dicts = {} #Dictionary
+            logs_file_name = []
+            temp_logs = []
+
+            f = open('logs/' + str(request.form['viewDate']) + '.txt', 'r')
+            for row in f:
+                if len(row) > 1:
+                    temp_logs = row.strip().split(',')
+                    logs_file_dicts.update({temp_logs[1]:temp_logs[0]})
+            f.close()
+
+            for file in os.listdir(path):
+                if file.endswith(".txt"):
+                    if file == 'date.txt':
+                        print('Skip date file')
+                    else:
+                        logs_file_name.append(str(os.path.join(file)).replace(".txt","")) # Collect file name
+            return render_template('index.html', logs_file_dicts=logs_file_dicts, logs_file_name=logs_file_name)
+        else:
+            path = 'logs/' + str(request.form['viewDate']) + '.txt'
+            return send_file(path, as_attachment=True)
+
+    return render_template('index.html', logs_file_dicts=logs_file_dicts, logs_file_name=logs_file_name)
 
 @app.route('/run_script')
 def run_script():
