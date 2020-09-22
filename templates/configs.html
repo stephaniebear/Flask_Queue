@@ -20,6 +20,9 @@
         </div>
         <div class="col-md-12">
           <div class="alert alert-danger" role="alert" id="message" hidden></div>
+          {% for message in messages %} <!-- message form backeng -->
+            <div class="alert alert-danger" role="alert" id="message" >{{message}}</div>
+          {% endfor %}  
         </div>
         <div class="col-md-12">
           <label>Office</label>
@@ -36,6 +39,10 @@
         <div class="col-md-12">
           <label>QR Code</label>
           <input class="form-control" type="file" name="dol_qrcode" id="dol_qrcode" style="padding: 3px;" required>
+        </div>
+        <div class="col-md-12">
+          <label>Admin password</label>
+          <input class="form-control" type="text" name="dol_admin_password"  placeholder="Passcode" required>
         </div>
         <div class="col-md-12">
           <br>

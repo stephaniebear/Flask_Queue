@@ -36,6 +36,12 @@ def index():
 @app.route('/upload', methods=['GET', 'POST'])
 def upload():
     if request.method == 'POST':
+        messages = []
+        if request.form['dol_admin_password'] != "manage_ch2":
+            print('Admin password incorrect !!')
+            messages.append('Incorrect your password')
+            dol_office = open('configs/dol_office.txt', 'r', encoding="UTF-8") # 
+            return render_template('configs.html', messages=messages, dol_office=dol_office)
         # f = open('configs/config.txt', 'r')
         # for row in f:
         #     tempContent = row.replace('\n', ' ')
@@ -47,12 +53,12 @@ def upload():
         #Get Office
         dol_office = request.form['dol_office']
         dol_office = dol_office.encode('ascii', 'backslashreplace')
-        dol_office = str(dol_office).replace(" ","\n")
+        dol_office = str(dol_office).replace(" "," \n")
         dol_office = str(dol_office).replace("\\\\","\\")
         dol_office = str(dol_office).replace("b'","")
         dol_office = str(dol_office).replace("'","")
         
-        dol_office = str(dol_office).replace("\\r","")
+        #dol_office = str(dol_office).replace("\\r","")
         print(dol_office)
 
         # Save to config.txt
@@ -163,4 +169,4 @@ def stop_script():
     return render_template('index.html')
 
 if __name__ == '__main__':
-    app.run(debug=True, host='127.0.0.1', port=5000)
+    app.run(debug=True, host='0.0.0.0', port=5000)
