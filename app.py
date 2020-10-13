@@ -146,9 +146,15 @@ def view():
                     else:
                         logs_file_name.append(str(os.path.join(file)).replace(".txt","")) # Collect file name
             return render_template('index.html', logs_file_dicts=logs_file_dicts, logs_file_name=logs_file_name)
-        else:
+        elif request.form['inlineRadioOptions'] == "option2":
             path = 'logs/' + str(request.form['viewDate']) + '.txt'
             return send_file(path, as_attachment=True)
+        else:
+            path = 'logs/' + str(request.form['viewDate']) + '.txt'
+
+            print('Delete')
+            os.remove(path)
+            return redirect(url_for('index'))
 
     return render_template('index.html', logs_file_dicts=logs_file_dicts, logs_file_name=logs_file_name)
 
